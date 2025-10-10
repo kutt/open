@@ -1,0 +1,140 @@
+---
+import { Search, Filter, SortAsc } from "lucide-astro";
+---
+
+<div class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+    <div class="flex flex-col lg:flex-row gap-4">
+      <!-- Search Input -->
+      <div class="flex-1">
+        <div class="relative">
+          <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+            <Search class="h-5 w-5 text-gray-400" />
+          </div>
+          <input
+            type="text"
+            placeholder="Search for alternatives..."
+            class="block w-full pl-10 pr-3 py-3 border border-gray-300 dark:border-gray-600 rounded-lg leading-5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:placeholder-gray-400 focus:ring-2 focus:ring-primary-500 focus:border-primary-500 text-base transition-colors"
+            id="search-input"
+          />
+        </div>
+      </div>
+
+      <!-- Filters -->
+      <div class="flex gap-2">
+        <!-- Category Filter -->
+        <div class="relative">
+          <button
+            id="category-filter-btn"
+            class="inline-flex items-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+          >
+            <Filter class="h-4 w-4 mr-2" />
+            Category
+          </button>
+          <div
+            id="category-dropdown"
+            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600 transition-colors hidden"
+          >
+            <div class="py-1">
+              <a href="/search?category=office-suites" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Office Suites
+              </a>
+              <a href="/search?category=media-players" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Media Players
+              </a>
+              <a href="/search?category=graphic-design" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Graphic Design
+              </a>
+              <a href="/search?category=development" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Development Tools
+              </a>
+              <a href="/search?category=communication" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Communication
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sort Filter -->
+        <div class="relative">
+          <button
+            id="sort-filter-btn"
+            class="inline-flex items-center px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+          >
+            <SortAsc class="h-4 w-4 mr-2" />
+            Sort
+          </button>
+          <div
+            id="sort-dropdown"
+            class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600 transition-colors hidden"
+          >
+            <div class="py-1">
+              <a href="/search?sort=popularity" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Most Popular
+              </a>
+              <a href="/search?sort=rating" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Highest Rated
+              </a>
+              <a href="/search?sort=newest" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Newest
+              </a>
+              <a href="/search?sort=name" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                Alphabetical
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Active Filters -->
+    <div class="mt-4 flex flex-wrap gap-2 hidden" id="active-filters">
+      <!-- Active filters will be added here dynamically -->
+    </div>
+  </div>
+</div>
+
+<script>
+  // Search functionality
+  const searchInput = document.getElementById('search-input');
+  if (searchInput) {
+    searchInput.addEventListener('keyup', (e) => {
+      if (e.key === 'Enter') {
+        const query = e.target.value.trim();
+        if (query) {
+          window.location.href = `/search?q=${encodeURIComponent(query)}`;
+        }
+      }
+    });
+  }
+
+  // Category filter dropdown
+  const categoryBtn = document.getElementById('category-filter-btn');
+  const categoryDropdown = document.getElementById('category-dropdown');
+  const sortBtn = document.getElementById('sort-filter-btn');
+  const sortDropdown = document.getElementById('sort-dropdown');
+
+  if (categoryBtn && categoryDropdown) {
+    categoryBtn.addEventListener('click', () => {
+      categoryDropdown.classList.toggle('hidden');
+      sortDropdown.classList.add('hidden'); // Close other dropdown
+    });
+  }
+
+  if (sortBtn && sortDropdown) {
+    sortBtn.addEventListener('click', () => {
+      sortDropdown.classList.toggle('hidden');
+      categoryDropdown.classList.add('hidden'); // Close other dropdown
+    });
+  }
+
+  // Close dropdowns when clicking outside
+  document.addEventListener('click', (e) => {
+    if (!categoryBtn?.contains(e.target) && !categoryDropdown?.contains(e.target)) {
+      categoryDropdown?.classList.add('hidden');
+    }
+    if (!sortBtn?.contains(e.target) && !sortDropdown?.contains(e.target)) {
+      sortDropdown?.classList.add('hidden');
+    }
+  });
+</script>

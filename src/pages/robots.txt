@@ -1,0 +1,19 @@
+---
+// Robots.txt for SEO
+---
+
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://openalternatives.github.io/sitemap.xml
+
+# Disallow admin pages
+Disallow: /admin/
+Disallow: /user/
+Disallow: /api/
+
+# Allow search engines to crawl alternatives and categories
+Allow: /alternatives/
+Allow: /categories/
+Allow: /search

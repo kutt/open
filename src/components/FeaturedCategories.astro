@@ -1,0 +1,179 @@
+---
+import { ArrowRight } from "lucide-astro";
+import alternativesData from "../data/alternatives.json";
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+}
+
+const { 
+  title = "Popular Categories",
+  subtitle = "Explore alternatives across different software categories"
+} = Astro.props;
+
+// Process the alternatives data to find most popular categories
+const categoryCounts = alternativesData.reduce((acc, alternative) => {
+  const category = alternative.category;
+  if (!acc[category]) {
+    acc[category] = {
+      id: category,
+      name: category.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' '),
+      slug: category,
+      count: 0,
+      description: getCategoryDescription(category)
+    };
+  }
+  acc[category].count++;
+  return acc;
+}, {} as Record<string, any>);
+
+// Get top 6 categories by count
+const topCategories = Object.values(categoryCounts)
+  .sort((a: any, b: any) => b.count - a.count)
+  .slice(0, 6);
+
+function getCategoryDescription(category: string): string {
+  const descriptions: Record<string, string> = {
+    'cms': 'Content management systems for building websites and applications',
+    'version-control': 'Tools for tracking changes in source code and collaboration',
+    'development': 'Development tools and frameworks for building software',
+    'database': 'Database management systems and data storage solutions',
+    'web-server': 'Web servers and HTTP server software',
+    'monitoring': 'System monitoring and observability tools',
+    'mail-server': 'Email server software for handling mail delivery',
+    'container-orchestration': 'Tools for managing containerized applications',
+    'ci-cd': 'Continuous integration and deployment pipelines',
+    'email-client': 'Email client applications for reading and sending emails',
+    'video-editing': 'Video editing and post-production software',
+    'graphic-design': 'Graphic design and image editing tools',
+    'audio-editing': 'Audio editing and music production software',
+    'latex-editor': 'LaTeX document preparation and editing tools',
+    'photo-editing': 'Photo editing and image manipulation software',
+    'music-notation': 'Music notation and composition software',
+    'communication': 'Communication and messaging platforms',
+    'pdf-reader': 'PDF viewing and reading applications',
+    'pdf-editor': 'PDF editing and manipulation tools',
+    'webmail': 'Web-based email client interfaces',
+    'web-browsers': 'Web browsers for internet navigation',
+    'video-recording': 'Screen recording and video capture tools',
+    'team-knowledge-base': 'Knowledge management and documentation systems',
+    'media-players': 'Media players for audio and video playback',
+    'internal-tool': 'Internal tools for business operations',
+    'ebook-reader': 'E-book reading and management applications',
+    'developer-tools': 'Tools and utilities for software development',
+    'cloud-storage': 'Cloud storage and file synchronization services',
+    '3d-modeling': '3D modeling and computer graphics software',
+    'office-suites': 'Office productivity and document suites',
+    'e-commerce': 'E-commerce platforms and online store solutions',
+    'crm': 'Customer relationship management systems',
+    'ai-chatbot': 'AI-powered chatbot and conversational AI tools',
+    'visual-database': 'Visual database design and management tools',
+    'social-media': 'Social media platforms and networking tools',
+    'project-management': 'Project management and task tracking tools',
+    'observability-monitoring': 'Application observability and monitoring solutions',
+    'gaming': 'Game development engines and gaming platforms',
+    'email-sync': 'Email synchronization and management tools',
+    'cybersecurity': 'Cybersecurity and security management tools',
+    'business-intelligence': 'Business intelligence and analytics platforms',
+    'automation': 'Workflow automation and process management tools',
+    'auth-sso': 'Authentication and single sign-on solutions',
+    'analytics': 'Data analytics and business intelligence tools',
+    'ai-code-completion': 'AI-powered code completion and assistance tools'
+  };
+  
+  return descriptions[category] || `Open source alternatives in the ${category} category`;
+}
+---
+
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        {title}
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        {subtitle}
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+      {topCategories.map((category, index) => (
+        <a 
+          href={`/categories/${category.slug}`}
+          class="group bg-white dark:bg-gray-800 rounded-xl p-6 lg:p-8 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600 animate-fade-in-up"
+          style={`animation-delay: ${index * 100}ms;`}
+        >
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
+              <span class="text-primary-600 dark:text-primary-400 text-xl font-bold">
+                {category.name.charAt(0)}
+              </span>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                {category.name}
+              </h3>
+              <p class="text-sm text-gray-500 dark:text-gray-400">
+                {category.count} alternatives
+              </p>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 mb-4">
+            {category.description}
+          </p>
+          <div class="flex items-center text-primary-600 dark:text-primary-400 font-medium group-hover:text-primary-700 dark:group-hover:text-primary-300">
+            Explore alternatives
+            <ArrowRight class="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform" />
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  @keyframes fade-in-up {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in-up {
+    animation: fade-in-up 0.6s ease-out forwards;
+    opacity: 0;
+  }
+
+  /* Intersection Observer will trigger animation when element comes into view */
+  .animate-fade-in-up.animate {
+    opacity: 1;
+  }
+</style>
+
+<script>
+  // Intersection Observer for scroll-triggered animations
+  document.addEventListener('DOMContentLoaded', () => {
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    });
+
+    // Observe all animated elements
+    document.querySelectorAll('.animate-fade-in-up').forEach((el) => {
+      observer.observe(el);
+    });
+  });
+</script>

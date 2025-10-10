@@ -1,11 +1,20 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
-
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import PopularToolsCarousel from "../components/PopularToolsCarousel.astro";
+import FeaturedCategories from "../components/FeaturedCategories.astro";
+import FeaturedAlternatives from "../components/FeaturedAlternatives.astro";
+import WhyOpenSource from "../components/WhyOpenSource.astro";
 ---
 
-<Layout>
-	<Welcome />
+<Layout title="Open Alternatives - Find Open Source Software Alternatives" description="Discover free, community-driven alternatives to popular software. Break free from vendor lock-in and embrace open source solutions.">
+  <Hero />
+
+  <PopularToolsCarousel />
+
+  <FeaturedCategories />
+
+  <FeaturedAlternatives />
+
+  <WhyOpenSource />
 </Layout>

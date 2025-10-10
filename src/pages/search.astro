@@ -1,0 +1,456 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { sampleCategories } from "../types/data.ts";
+import { Star, Search, Github, Grid, List, Filter, SortAsc, X } from "lucide-astro";
+import { sampleAlternatives } from "../types/data.ts";
+
+// Get search parameters from URL
+const url = new URL(Astro.request.url);
+const query = url.searchParams.get("q") || "";
+const category = url.searchParams.get("category") || "";
+const license = url.searchParams.get("license") || "";
+const platform = url.searchParams.get("platform") || "";
+const sortBy = url.searchParams.get("sort") || "popularity";
+
+// Filter alternatives based on search parameters
+let filteredAlternatives = sampleAlternatives;
+
+if (query) {
+  filteredAlternatives = filteredAlternatives.filter(
+    (alt) =>
+      alt.name.toLowerCase().includes(query.toLowerCase()) ||
+      alt.description.toLowerCase().includes(query.toLowerCase())
+  );
+}
+
+if (category) {
+  filteredAlternatives = filteredAlternatives.filter((alt) => alt.categoryId === category);
+}
+
+if (license) {
+  filteredAlternatives = filteredAlternatives.filter((alt) =>
+    alt.license.toLowerCase().includes(license.toLowerCase())
+  );
+}
+
+if (platform) {
+  filteredAlternatives = filteredAlternatives.filter((alt) =>
+    alt.platforms.some((p) => p.name.toLowerCase().includes(platform.toLowerCase()))
+  );
+}
+
+// Sort alternatives
+switch (sortBy) {
+  case "rating":
+    filteredAlternatives.sort((a, b) => b.rating - a.rating);
+    break;
+  case "newest":
+    filteredAlternatives.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    break;
+  case "name":
+    filteredAlternatives.sort((a, b) => a.name.localeCompare(b.name));
+    break;
+  default: // popularity
+    filteredAlternatives.sort((a, b) => b.bookmarkCount - a.bookmarkCount);
+}
+---
+
+<Layout title="Search Alternatives - Open Alternatives" description="Search for open source alternatives to popular software. Find free, community-driven solutions.">
+<div class="bg-white dark:bg-gray-800 transition-colors duration-300">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Search Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+        {query ? `Search Results for "${query}"` : 'Search Alternatives'}
+      </h1>
+      
+      <!-- Search Form -->
+      <form method="GET" class="max-w-2xl">
+        <div class="flex gap-4">
+          <div class="flex-1">
+            <input
+              type="text"
+              name="q"
+              value={query}
+              placeholder="Search for alternatives..."
+              class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 transition-colors"
+            />
+          </div>
+          <button
+            type="submit"
+            class="px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            <Search class="h-5 w-5" />
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Active Filters -->
+    {(query || category || license || platform) && (
+      <div class="mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <h2 class="text-lg font-medium text-gray-900 dark:text-white">Active Filters</h2>
+          <a 
+            href="/search" 
+            class="text-sm text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
+          >
+            Clear All
+          </a>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          {query && (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
+              Query: {query}
+              <a href={`/search?${new URLSearchParams({ category, license, platform, sort: sortBy }).toString()}`} class="ml-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-200">
+                <X class="h-4 w-4" />
+              </a>
+            </span>
+          )}
+          {category && (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
+              Category: {sampleCategories.find(c => c.id === category)?.name}
+              <a href={`/search?${new URLSearchParams({ q: query, license, platform, sort: sortBy }).toString()}`} class="ml-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-200">
+                <X class="h-4 w-4" />
+              </a>
+            </span>
+          )}
+          {license && (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
+              License: {license}
+              <a href={`/search?${new URLSearchParams({ q: query, category, platform, sort: sortBy }).toString()}`} class="ml-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-200">
+                <X class="h-4 w-4" />
+              </a>
+            </span>
+          )}
+          {platform && (
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-800 dark:text-primary-200">
+              Platform: {platform}
+              <a href={`/search?${new URLSearchParams({ q: query, category, license, sort: sortBy }).toString()}`} class="ml-2 text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-200">
+                <X class="h-4 w-4" />
+              </a>
+            </span>
+          )}
+        </div>
+      </div>
+    )}
+
+    <!-- Filters and Controls -->
+    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-6 mb-8">
+      <div class="flex flex-col lg:flex-row gap-4 items-center justify-between">
+        <!-- View Toggle -->
+        <div class="flex items-center space-x-2">
+          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">View:</span>
+          <div class="flex bg-white dark:bg-gray-600 rounded-lg border border-gray-300 dark:border-gray-500">
+            <button class="p-2 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-900 rounded-l-lg">
+              <Grid class="h-4 w-4" />
+            </button>
+            <button class="p-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300">
+              <List class="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="flex flex-wrap gap-2">
+          <!-- Category Filter -->
+          <div class="relative">
+            <button
+              id="category-btn"
+              class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+            >
+              <Filter class="h-4 w-4 mr-2" />
+              Category
+            </button>
+            <div
+              id="category-dropdown"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600 transition-colors hidden"
+            >
+              <div class="py-1">
+                <a href={`/search?${new URLSearchParams({ q: query, license, platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  All Categories
+                </a>
+                {sampleCategories.map((cat) => (
+                  <a href={`/search?${new URLSearchParams({ q: query, category: cat.id, license, platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                    {cat.name}
+                  </a>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <!-- License Filter -->
+          <div class="relative">
+            <button
+              id="license-btn"
+              class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+            >
+              <Filter class="h-4 w-4 mr-2" />
+              License
+            </button>
+            <div
+              id="license-dropdown"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600 transition-colors hidden"
+            >
+              <div class="py-1">
+                <a href={`/search?${new URLSearchParams({ q: query, category, platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  All Licenses
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license: 'MIT', platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  MIT
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license: 'GPL', platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  GPL
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license: 'Apache', platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Apache
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license: 'BSD', platform, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  BSD
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Platform Filter -->
+          <div class="relative">
+            <button
+              id="platform-btn"
+              class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+            >
+              <Filter class="h-4 w-4 mr-2" />
+              Platform
+            </button>
+            <div
+              id="platform-dropdown"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600 transition-colors hidden"
+            >
+              <div class="py-1">
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  All Platforms
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform: 'Windows', sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Windows
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform: 'macOS', sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  macOS
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform: 'Linux', sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Linux
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform: 'Web', sort: sortBy }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Web
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sort -->
+          <div class="relative">
+            <button
+              id="sort-btn"
+              class="inline-flex items-center px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md text-sm font-medium text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-primary-500 transition-colors"
+            >
+              <SortAsc class="h-4 w-4 mr-2" />
+              Sort
+            </button>
+            <div
+              id="sort-dropdown"
+              class="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 rounded-md shadow-lg z-10 border border-gray-200 dark:border-gray-600 transition-colors hidden"
+            >
+              <div class="py-1">
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform, sort: 'popularity' }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Most Popular
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform, sort: 'rating' }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Highest Rated
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform, sort: 'newest' }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Newest
+                </a>
+                <a href={`/search?${new URLSearchParams({ q: query, category, license, platform, sort: 'name' }).toString()}`} class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors">
+                  Alphabetical
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Results Count -->
+        <div class="text-sm text-gray-600 dark:text-gray-300">
+          {filteredAlternatives.length} alternatives found
+        </div>
+      </div>
+    </div>
+
+    <!-- Search Results -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {filteredAlternatives.map((alternative) => (
+        <div class="bg-white dark:bg-gray-700 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-primary-300 dark:hover:border-primary-500 hover:shadow-lg transition-all duration-300 overflow-hidden">
+          <!-- Header -->
+          <div class="p-6">
+            <div class="flex items-start justify-between mb-4">
+              <div class="flex items-center">
+                <div class="w-12 h-12 bg-gray-100 dark:bg-gray-600 rounded-lg flex items-center justify-center">
+                  <span class="text-gray-600 dark:text-gray-300 text-lg font-bold">
+                    {alternative.name.charAt(0)}
+                  </span>
+                </div>
+                <div class="ml-4">
+                  <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                    {alternative.name}
+                  </h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400">
+                    {alternative.license}
+                  </p>
+                </div>
+              </div>
+              <div class="flex items-center text-yellow-500">
+                <Star class="h-4 w-4 fill-current" />
+                <span class="ml-1 text-sm font-medium text-gray-700 dark:text-gray-300">
+                  {alternative.rating}
+                </span>
+              </div>
+            </div>
+
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4 line-clamp-3">
+              {alternative.description}
+            </p>
+
+            <!-- Platforms -->
+            <div class="flex flex-wrap gap-2 mb-4">
+              {alternative.platforms.slice(0, 3).map((platform) => (
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200">
+                  {platform.name}
+                </span>
+              ))}
+              {alternative.platforms.length > 3 && (
+                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-600 text-gray-800 dark:text-gray-200">
+                  +{alternative.platforms.length - 3} more
+                </span>
+              )}
+            </div>
+
+            <!-- Stats -->
+            <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400 mb-4">
+              <div class="flex items-center">
+                <Github class="h-4 w-4 mr-1" />
+                {alternative.stars?.toLocaleString()} stars
+              </div>
+              <div>
+                {alternative.reviewCount} reviews
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex items-center justify-between">
+              <div class="flex space-x-2">
+                <a 
+                  href={alternative.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-3 py-2 text-sm font-medium text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300"
+                >
+                  Website
+                </a>
+                {alternative.repository && (
+                  <a 
+                    href={alternative.repository}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+                  >
+                    <Github class="h-4 w-4 mr-1" />
+                    Source
+                  </a>
+                )}
+              </div>
+              <a 
+                href={`/alternatives/${alternative.id}`}
+                class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium text-sm"
+              >
+                Learn more →
+              </a>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <!-- No Results -->
+    {filteredAlternatives.length === 0 && (
+      <div class="text-center py-12">
+        <div class="w-16 h-16 bg-gray-100 dark:bg-gray-600 rounded-full flex items-center justify-center mx-auto mb-4">
+          <Search class="h-8 w-8 text-gray-400 dark:text-gray-500" />
+        </div>
+        <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No alternatives found</h3>
+        <p class="text-gray-600 dark:text-gray-300 mb-6">Try adjusting your search terms or filters</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a 
+            href="/search"
+            class="inline-flex items-center px-4 py-2 bg-primary-600 text-white font-medium rounded-lg hover:bg-primary-700 transition-colors"
+          >
+            Clear Filters
+          </a>
+          <a 
+            href="/submit"
+            class="inline-flex items-center px-4 py-2 bg-white dark:bg-gray-700 text-primary-600 dark:text-primary-400 font-medium rounded-lg border border-primary-600 dark:border-primary-400 hover:bg-primary-50 dark:hover:bg-gray-600 transition-colors"
+          >
+            Submit an Alternative
+          </a>
+        </div>
+      </div>
+    )}
+  </div>
+</div>
+
+<!-- Vanilla JavaScript for dropdown interactions -->
+<script>
+  // Dropdown functionality without Alpine.js
+  function initDropdowns() {
+    const dropdowns = [
+      { btn: 'category-btn', dropdown: 'category-dropdown' },
+      { btn: 'license-btn', dropdown: 'license-dropdown' },
+      { btn: 'platform-btn', dropdown: 'platform-dropdown' },
+      { btn: 'sort-btn', dropdown: 'sort-dropdown' }
+    ];
+
+    dropdowns.forEach(({ btn, dropdown }) => {
+      const button = document.getElementById(btn);
+      const dropdownEl = document.getElementById(dropdown);
+
+      if (button && dropdownEl) {
+        // Toggle dropdown on button click
+        button.addEventListener('click', (e) => {
+          e.stopPropagation();
+          // Close all other dropdowns
+          dropdowns.forEach(({ dropdown: otherDropdown }) => {
+            if (otherDropdown !== dropdown) {
+              document.getElementById(otherDropdown)?.classList.add('hidden');
+            }
+          });
+          // Toggle current dropdown
+          dropdownEl.classList.toggle('hidden');
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+          if (!button.contains(e.target) && !dropdownEl.contains(e.target)) {
+            dropdownEl.classList.add('hidden');
+          }
+        });
+      }
+    });
+  }
+
+  // Initialize when DOM is loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initDropdowns);
+  } else {
+    initDropdowns();
+  }
+</script>
+</div>
+</Layout>

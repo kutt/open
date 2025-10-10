@@ -1,0 +1,275 @@
+---
+import alternativesData from "../data/alternatives.json";
+
+// Get popular tools with their alternatives count
+const popularTools = [
+  {
+    id: "unity",
+    name: "Unity",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Unity").length,
+    categoryId: "gaming",
+    description: "Game development platform",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Unity")
+  },
+  {
+    id: "slack",
+    name: "Slack",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Slack").length,
+    categoryId: "communication",
+    description: "Business communication platform",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Slack")
+  },
+  {
+    id: "notion",
+    name: "Notion",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Notion").length,
+    categoryId: "project-management",
+    description: "All-in-one workspace",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Notion")
+  },
+  {
+    id: "figma",
+    name: "Figma",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Figma").length,
+    categoryId: "graphic-design",
+    description: "Collaborative design tool",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Figma")
+  },
+  {
+    id: "zoom",
+    name: "Zoom",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Zoom").length,
+    categoryId: "communication",
+    description: "Video conferencing platform",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Zoom")
+  },
+  {
+    id: "photoshop",
+    name: "Photoshop",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Photoshop").length,
+    categoryId: "graphic-design",
+    description: "Image editing software",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Photoshop")
+  },
+  {
+    id: "salesforce",
+    name: "Salesforce",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Salesforce").length,
+    categoryId: "crm",
+    description: "Customer relationship management",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Salesforce")
+  },
+  {
+    id: "datadog",
+    name: "DataDog",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "DataDog").length,
+    categoryId: "monitoring",
+    description: "Monitoring and analytics",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "DataDog")
+  },
+  {
+    id: "github",
+    name: "GitHub",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "GitHub").length,
+    categoryId: "developer-tools",
+    description: "Code hosting platform",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "GitHub")
+  },
+  {
+    id: "tableau",
+    name: "Tableau",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Tableau").length,
+    categoryId: "business-intelligence",
+    description: "Data visualization platform",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Tableau")
+  },
+  {
+    id: "shopify",
+    name: "Shopify",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "Shopify").length,
+    categoryId: "e-commerce",
+    description: "E-commerce platform",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "Shopify")
+  },
+  {
+    id: "mysql",
+    name: "MySQL",
+    alternativeCount: alternativesData.filter(alt => alt.alternativeTo === "MySQL").length,
+    categoryId: "database",
+    description: "Database management system",
+    alternatives: alternativesData.filter(alt => alt.alternativeTo === "MySQL")
+  }
+];
+
+// Function to get logo URL for a tool
+function getLogoUrl(toolName) {
+  // For now, we'll use a placeholder service, but this could be enhanced
+  // to use actual logo APIs or local logo files
+  const logoMap = {
+    "Unity": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/unity/unity-original.svg",
+    "Slack": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/slack/slack-original.svg",
+    "Notion": "https://upload.wikimedia.org/wikipedia/commons/4/45/Notion_app_logo.png",
+    "Figma": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/figma/figma-original.svg",
+    "Zoom": "https://upload.wikimedia.org/wikipedia/commons/7/7b/Zoom_Communications_Logo.svg",
+    "Photoshop": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/photoshop/photoshop-plain.svg",
+    "Salesforce": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/salesforce/salesforce-original.svg",
+    "DataDog": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/datadog/datadog-original.svg",
+    "GitHub": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/github/github-original.svg",
+    "Tableau": "https://upload.wikimedia.org/wikipedia/commons/4/4b/Tableau_Logo.png",
+    "Shopify": "https://upload.wikimedia.org/wikipedia/commons/e/e1/Shopify_Logo.png",
+    "MySQL": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mysql/mysql-original.svg"
+  };
+  
+  return logoMap[toolName] || `https://ui-avatars.com/api/?name=${encodeURIComponent(toolName)}&background=b4da55&color=fff&size=64`;
+}
+---
+
+<div class="bg-gray-50 dark:bg-gray-900 py-16 overflow-hidden">
+  <div class="px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Popular Tools & Their Alternatives
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Discover open source alternatives to the tools you use every day
+      </p>
+    </div>
+
+    <!-- Carousel Container -->
+    <div class="relative overflow-hidden">
+      <!-- Carousel Track using Stack Overflow solution -->
+      <div class="carousel-track">
+        <!-- First set of tools -->
+        {popularTools.map((tool) => (
+          <a 
+            href={`/search?tool=${tool.id}`}
+            class="carousel-item group flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600"
+          >
+            <div class="text-center">
+              <!-- Tool Logo -->
+              <div class="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 bg-gray-50 dark:bg-gray-700">
+                <img 
+                  src={getLogoUrl(tool.name)} 
+                  alt={`${tool.name} logo`}
+                  class="w-12 h-12 object-contain"
+                  loading="lazy"
+                />
+              </div>
+              
+              <!-- Tool Name -->
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                {tool.name}
+              </h3>
+              
+              <!-- Alternative Count -->
+              <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
+                <span class="font-bold">{tool.alternativeCount}</span>
+                <span class="ml-1">alternatives</span>
+              </div>
+              
+              <!-- Description -->
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
+                {tool.description}
+              </p>
+            </div>
+          </a>
+        ))}
+
+        <!-- Duplicate set for seamless loop -->
+        {popularTools.map((tool) => (
+          <a 
+            href={`/search?tool=${tool.id}`}
+            class="carousel-item group flex-shrink-0 w-48 bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600"
+          >
+            <div class="text-center">
+              <!-- Tool Logo -->
+              <div class="w-16 h-16 rounded-xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300 bg-gray-50 dark:bg-gray-700">
+                <img 
+                  src={getLogoUrl(tool.name)} 
+                  alt={`${tool.name} logo`}
+                  class="w-12 h-12 object-contain"
+                  loading="lazy"
+                />
+              </div>
+              
+              <!-- Tool Name -->
+              <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                {tool.name}
+              </h3>
+              
+              <!-- Alternative Count -->
+              <div class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
+                <span class="font-bold">{tool.alternativeCount}</span>
+                <span class="ml-1">alternatives</span>
+              </div>
+              
+              <!-- Description -->
+              <p class="text-sm text-gray-500 dark:text-gray-400 mt-2 line-clamp-2">
+                {tool.description}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
+
+      <!-- Gradient Overlays -->
+      <div class="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent pointer-events-none z-10"></div>
+      <div class="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent pointer-events-none z-10"></div>
+    </div>
+
+    <!-- View All Button -->
+    <div class="text-center mt-12">
+      <a 
+        href="/search"
+        class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+      >
+        View All Alternatives
+        <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
+</div>
+
+<style>
+  .line-clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Carousel styles based on Stack Overflow solution */
+  .carousel-track {
+    display: flex;
+    gap: 1rem;
+    width: fit-content;
+    animation: carousel-move 30s linear infinite;
+  }
+
+  .carousel-item {
+    margin-right: 1rem;
+  }
+
+  /* Pause animation on hover */
+  .carousel-track:hover {
+    animation-play-state: paused;
+  }
+
+  @keyframes carousel-move {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .carousel-track {
+      animation-duration: 20s;
+    }
+  }
+</style>

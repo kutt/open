@@ -1,0 +1,105 @@
+---
+import Layout from "../../layouts/Layout.astro";
+// Data collection script for gathering alternatives from external sources
+import {
+  DataCollector,
+  sanitizeAlternative,
+  transformToInternalFormat,
+  validateAlternative,
+} from "../../utils/data-collection.ts";
+
+// This would typically be run as a scheduled job or manual process
+async function collectData() {
+  const collector = new DataCollector();
+
+  try {
+    // Collect data from all sources
+    const collectedData = await collector.collectAll();
+
+    // Validate and sanitize data
+    const validData = collectedData.filter(validateAlternative);
+
+    const sanitizedData = validData.map(sanitizeAlternative);
+
+    // Transform to internal format
+    const transformedData = transformToInternalFormat(sanitizedData);
+
+    // Save to database or file
+    await saveData(transformedData);
+  } catch (_error) {}
+}
+
+async function saveData(_data: unknown[]) {}
+
+// Run if this is the main module
+if (import.meta.main) {
+  collectData();
+}
+---
+
+<Layout title="Data Collection - Admin Panel" description="Admin panel for data collection and management.">
+<div class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="text-center">
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Data Collection</h1>
+      <p class="text-xl text-gray-600 mb-8">
+        Automated data collection from open source alternative websites
+      </p>
+      
+      <div class="bg-gray-50 rounded-lg p-8 max-w-2xl mx-auto">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Data Sources</h2>
+        <div class="space-y-4 text-left">
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+            <div>
+              <h3 class="font-medium text-gray-900">OpenAlternative.co</h3>
+              <p class="text-sm text-gray-600">Curated list of open source alternatives</p>
+            </div>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Active
+            </span>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+            <div>
+              <h3 class="font-medium text-gray-900">AlternativeTo</h3>
+              <p class="text-sm text-gray-600">Comprehensive database of software alternatives</p>
+            </div>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Active
+            </span>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+            <div>
+              <h3 class="font-medium text-gray-900">OSSAlternatives</h3>
+              <p class="text-sm text-gray-600">Open source alternatives database</p>
+            </div>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Active
+            </span>
+          </div>
+          
+          <div class="flex items-center justify-between p-4 bg-white rounded-lg">
+            <div>
+              <h3 class="font-medium text-gray-900">GitHub Awesome Lists</h3>
+              <p class="text-sm text-gray-600">Community-maintained awesome lists</p>
+            </div>
+            <span class="px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+              Active
+            </span>
+          </div>
+        </div>
+        
+        <div class="mt-8">
+          <button 
+            class="px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+            onclick="alert('Data collection would start here in a real implementation')"
+          >
+            Start Data Collection
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</Layout>

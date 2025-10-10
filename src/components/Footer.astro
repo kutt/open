@@ -1,0 +1,107 @@
+---
+import { Github, Twitter, Mail, Heart } from "lucide-astro";
+import logoImage from "../assets/logo.png";
+---
+
+<footer class="bg-gray-900 dark:bg-gray-950 text-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <!-- Brand -->
+      <div class="col-span-1 md:col-span-2">
+        <div class="flex items-center space-x-2 mb-4">
+        <a href="/" class="flex items-center space-x-2">
+          <img src={logoImage.src} alt="open alternatives logo" class="w-8 h-8" />
+          <span class="text-xl font-bold text-gray-900 dark:text-white">open <span class="text-primary-600 dark:text-primary-400">alternatives</span></span>
+        </a>
+        </div>
+        <p class="text-gray-300 mb-4 max-w-md">
+          Discover open source alternatives to popular software. Find free, community-driven solutions that respect your privacy and freedom.
+        </p>
+        <div class="flex space-x-4">
+          <a href="https://github.com" class="text-gray-400 hover:text-white transition-colors">
+            <Github class="h-6 w-6" />
+          </a>
+          <a href="https://twitter.com" class="text-gray-400 hover:text-white transition-colors">
+            <Twitter class="h-6 w-6" />
+          </a>
+          <a href="mailto:contact@openalternatives.com" class="text-gray-400 hover:text-white transition-colors">
+            <Mail class="h-6 w-6" />
+          </a>
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li>
+            <a href="/categories" class="text-gray-300 hover:text-white transition-colors">
+              Browse Categories
+            </a>
+          </li>
+          <li>
+            <a href="/search" class="text-gray-300 hover:text-white transition-colors">
+              Search Alternatives
+            </a>
+          </li>
+          <li>
+            <a href="/submit" class="text-gray-300 hover:text-white transition-colors">
+              Submit Alternative
+            </a>
+          </li>
+          <li>
+            <a href="/about" class="text-gray-300 hover:text-white transition-colors">
+              About Us
+            </a>
+          </li>
+        </ul>
+      </div>
+
+      <!-- Resources -->
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+        <ul class="space-y-2">
+          <li>
+            <a href="/blog" class="text-gray-300 hover:text-white transition-colors">
+              Blog
+            </a>
+          </li>
+          <li>
+            <a href="/guides" class="text-gray-300 hover:text-white transition-colors">
+              Migration Guides
+            </a>
+          </li>
+          <li>
+            <a href="/api" class="text-gray-300 hover:text-white transition-colors">
+              API Documentation
+            </a>
+          </li>
+          <li>
+            <a href="/contribute" class="text-gray-300 hover:text-white transition-colors">
+              Contribute
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-800 mt-8 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-400 text-sm">
+          © 2024 Open Alternatives. Made with <Heart class="inline h-4 w-4 text-red-500" /> by the community.
+        </p>
+        <div class="flex space-x-6 mt-4 md:mt-0">
+          <a href="/privacy" class="text-gray-400 hover:text-white text-sm transition-colors">
+            Privacy Policy
+          </a>
+          <a href="/terms" class="text-gray-400 hover:text-white text-sm transition-colors">
+            Terms of Service
+          </a>
+          <a href="/license" class="text-gray-400 hover:text-white text-sm transition-colors">
+            License
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

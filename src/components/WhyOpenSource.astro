@@ -1,0 +1,54 @@
+---
+import { Users, Shield, Zap } from "lucide-astro";
+---
+
+<section class="py-20 bg-gray-50 dark:bg-gray-900">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Why Choose Open Source?
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Discover the benefits of open source software and why millions choose it
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center">
+        <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Users class="h-8 w-8 text-primary-600 dark:text-primary-400" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Community Driven
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300">
+          Built by passionate developers worldwide, open source software benefits from diverse perspectives and continuous improvement.
+        </p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Shield class="h-8 w-8 text-primary-600 dark:text-primary-400" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Transparent & Secure
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300">
+          Source code is publicly available, allowing for security audits and ensuring no hidden backdoors or malicious code.
+        </p>
+      </div>
+
+      <div class="text-center">
+        <div class="w-16 h-16 bg-primary-100 dark:bg-primary-900 rounded-full flex items-center justify-center mx-auto mb-6">
+          <Zap class="h-8 w-8 text-primary-600 dark:text-primary-400" />
+        </div>
+        <h3 class="text-xl font-semibold text-gray-900 dark:text-white mb-4">
+          Cost Effective
+        </h3>
+        <p class="text-gray-600 dark:text-gray-300">
+          Most open source software is free to use, helping businesses and individuals save on licensing costs while getting enterprise-grade features.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

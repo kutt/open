@@ -1,0 +1,384 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import { sampleAlternatives, sampleCategories } from "../../types/data.ts";
+
+export async function getStaticPaths() {
+  return sampleAlternatives.map((alternative) => ({
+    params: { id: alternative.id },
+    props: { alternative, category: sampleCategories.find((c) => c.id === alternative.categoryId) },
+  }));
+}
+
+const { alternative, category } = Astro.props;
+---
+
+<Layout title={`${alternative.name} - Open Source Alternative`} description={alternative.description}>
+<div class="bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Breadcrumb -->
+    <nav class="flex mb-8" aria-label="Breadcrumb">
+      <ol class="flex items-center space-x-2">
+        <li>
+          <a href="/" class="text-gray-500 hover:text-gray-700">Home</a>
+        </li>
+        <li>
+          <span class="text-gray-400">/</span>
+        </li>
+        <li>
+          <a href="/categories" class="text-gray-500 hover:text-gray-700">Categories</a>
+        </li>
+        <li>
+          <span class="text-gray-400">/</span>
+        </li>
+        <li>
+          <a href={`/categories/${category?.slug}`} class="text-gray-500 hover:text-gray-700">{category?.name}</a>
+        </li>
+        <li>
+          <span class="text-gray-400">/</span>
+        </li>
+        <li>
+          <span class="text-gray-900 font-medium">{alternative.name}</span>
+        </li>
+      </ol>
+    </nav>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Main Content -->
+      <div class="lg:col-span-2">
+        <!-- Header -->
+        <div class="mb-8">
+          <div class="flex items-start justify-between mb-6">
+            <div class="flex items-center">
+              <div class="w-16 h-16 bg-gray-100 rounded-xl flex items-center justify-center">
+                <span class="text-gray-600 text-2xl font-bold">
+                  {alternative.name.charAt(0)}
+                </span>
+              </div>
+              <div class="ml-6">
+                <h1 class="text-3xl font-bold text-gray-900 mb-2">{alternative.name}</h1>
+                <p class="text-gray-600 mb-2">{alternative.description}</p>
+                <div class="flex items-center space-x-4">
+                  <div class="flex items-center text-yellow-500">
+                    <Star class="h-5 w-5 fill-current" />
+                    <span class="ml-1 text-lg font-semibold text-gray-700">
+                      {alternative.rating}
+                    </span>
+                    <span class="ml-1 text-gray-500">({alternative.reviewCount} reviews)</span>
+                  </div>
+                  <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    {alternative.license}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="flex items-center space-x-2">
+              <button class="p-2 text-gray-400 hover:text-red-500 transition-colors">
+                <Heart class="h-5 w-5" />
+              </button>
+              <button class="p-2 text-gray-400 hover:text-gray-600 transition-colors">
+                <Share2 class="h-5 w-5" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap gap-4">
+            <a 
+              href={alternative.website}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-flex items-center px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors"
+            >
+              <ExternalLink class="h-5 w-5 mr-2" />
+              Visit Website
+            </a>
+            {alternative.repository && (
+              <a 
+                href={alternative.repository}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center px-6 py-3 bg-gray-900 text-white font-semibold rounded-lg hover:bg-gray-800 transition-colors"
+              >
+                <Github class="h-5 w-5 mr-2" />
+                View Source
+              </a>
+            )}
+            <button class="inline-flex items-center px-6 py-3 bg-white text-gray-700 font-semibold rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
+              <Download class="h-5 w-5 mr-2" />
+              Download
+            </button>
+          </div>
+        </div>
+
+        <!-- Screenshots -->
+        {alternative.screenshots.length > 0 && (
+          <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Screenshots</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {alternative.screenshots.map((screenshot, index) => (
+                <div class="bg-gray-100 rounded-lg p-8 text-center">
+                  <div class="text-gray-400 text-sm">Screenshot {index + 1}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <!-- Features -->
+        <div class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-4">Features</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {alternative.features.map((feature) => (
+              <div class="flex items-start">
+                {feature.available ? (
+                  <CheckCircle class="h-5 w-5 text-green-500 mt-0.5 mr-3 flex-shrink-0" />
+                ) : (
+                  <XCircle class="h-5 w-5 text-red-500 mt-0.5 mr-3 flex-shrink-0" />
+                )}
+                <div>
+                  <h3 class="font-medium text-gray-900">{feature.name}</h3>
+                  <p class="text-gray-600 text-sm">{feature.description}</p>
+                  {feature.notes && (
+                    <p class="text-gray-500 text-xs mt-1">{feature.notes}</p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Pros and Cons -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+          <div>
+            <h3 class="text-xl font-bold text-green-600 mb-4 flex items-center">
+              <CheckCircle class="h-5 w-5 mr-2" />
+              Pros
+            </h3>
+            <ul class="space-y-2">
+              {alternative.pros.map((pro) => (
+                <li class="flex items-start">
+                  <CheckCircle class="h-4 w-4 text-green-500 mt-1 mr-3 flex-shrink-0" />
+                  <span class="text-gray-700">{pro}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h3 class="text-xl font-bold text-red-600 mb-4 flex items-center">
+              <XCircle class="h-5 w-5 mr-2" />
+              Cons
+            </h3>
+            <ul class="space-y-2">
+              {alternative.cons.map((con) => (
+                <li class="flex items-start">
+                  <XCircle class="h-4 w-4 text-red-500 mt-1 mr-3 flex-shrink-0" />
+                  <span class="text-gray-700">{con}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <div class="mb-8">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Reviews</h2>
+            <button class="text-primary-600 hover:text-primary-700 font-medium">
+              Write a Review
+            </button>
+          </div>
+
+          <!-- Review Summary -->
+          <div class="bg-gray-50 rounded-lg p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <div class="flex items-center">
+                <div class="text-3xl font-bold text-gray-900 mr-4">{alternative.rating}</div>
+                <div>
+                  <div class="flex items-center text-yellow-500 mb-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star class={`h-5 w-5 ${star <= Math.floor(alternative.rating) ? 'fill-current' : ''}`} />
+                    ))}
+                  </div>
+                  <div class="text-sm text-gray-600">{alternative.reviewCount} reviews</div>
+                </div>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-600 mb-1">Community Rating</div>
+                <div class="text-lg font-semibold text-gray-900">{alternative.bookmarkCount} bookmarks</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sample Reviews -->
+          <div class="space-y-6">
+            <div class="border border-gray-200 rounded-lg p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                    <span class="text-gray-600 font-medium">JD</span>
+                  </div>
+                  <div class="ml-3">
+                    <div class="font-medium text-gray-900">John Doe</div>
+                    <div class="text-sm text-gray-500">2 days ago</div>
+                  </div>
+                </div>
+                <div class="flex items-center text-yellow-500">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star class="h-4 w-4 fill-current" />
+                  ))}
+                </div>
+              </div>
+              <h3 class="font-medium text-gray-900 mb-2">Excellent alternative to proprietary software</h3>
+              <p class="text-gray-700 mb-4">
+                This is a fantastic open source alternative that provides all the features I need. 
+                The interface is clean and intuitive, and the community support is excellent.
+              </p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center text-sm text-gray-500">
+                  <ThumbsUp class="h-4 w-4 mr-1" />
+                  12 helpful
+                </div>
+                <button class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                  Reply
+                </button>
+              </div>
+            </div>
+
+            <div class="border border-gray-200 rounded-lg p-6">
+              <div class="flex items-start justify-between mb-4">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                    <span class="text-gray-600 font-medium">AS</span>
+                  </div>
+                  <div class="ml-3">
+                    <div class="font-medium text-gray-900">Alice Smith</div>
+                    <div class="text-sm text-gray-500">1 week ago</div>
+                  </div>
+                </div>
+                <div class="flex items-center text-yellow-500">
+                  {[1, 2, 3, 4].map((star) => (
+                    <Star class="h-4 w-4 fill-current" />
+                  ))}
+                  <Star class="h-4 w-4" />
+                </div>
+              </div>
+              <h3 class="font-medium text-gray-900 mb-2">Good but has room for improvement</h3>
+              <p class="text-gray-700 mb-4">
+                Solid alternative with most features working well. Some advanced features are missing 
+                compared to the proprietary version, but it's getting better with each update.
+              </p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center text-sm text-gray-500">
+                  <ThumbsUp class="h-4 w-4 mr-1" />
+                  8 helpful
+                </div>
+                <button class="text-primary-600 hover:text-primary-700 text-sm font-medium">
+                  Reply
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center mt-6">
+            <button class="text-primary-600 hover:text-primary-700 font-medium">
+              Load More Reviews
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div class="lg:col-span-1">
+        <!-- Platform Support -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Platform Support</h3>
+          <div class="space-y-3">
+            {alternative.platforms.map((platform) => (
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  {platform.name === 'Windows' && <Monitor class="h-5 w-5 text-gray-600 mr-3" />}
+                  {platform.name === 'macOS' && <Apple class="h-5 w-5 text-gray-600 mr-3" />}
+                  {platform.name === 'Linux' && <Tux class="h-5 w-5 text-gray-600 mr-3" />}
+                  {platform.name === 'Web' && <Globe class="h-5 w-5 text-gray-600 mr-3" />}
+                  <span class="text-gray-700">{platform.name}</span>
+                </div>
+                {platform.supported ? (
+                  <CheckCircle class="h-5 w-5 text-green-500" />
+                ) : (
+                  <XCircle class="h-5 w-5 text-red-500" />
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        <!-- Project Info -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Project Information</h3>
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">License</span>
+              <span class="font-medium text-gray-900">{alternative.license}</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-600">Last Updated</span>
+              <span class="font-medium text-gray-900">
+                {alternative.lastUpdated.toLocaleDateString()}
+              </span>
+            </div>
+            {alternative.stars && (
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">GitHub Stars</span>
+                <span class="font-medium text-gray-900">{alternative.stars.toLocaleString()}</span>
+              </div>
+            )}
+            {alternative.forks && (
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Forks</span>
+                <span class="font-medium text-gray-900">{alternative.forks.toLocaleString()}</span>
+              </div>
+            )}
+            {alternative.contributors && (
+              <div class="flex items-center justify-between">
+                <span class="text-gray-600">Contributors</span>
+                <span class="font-medium text-gray-900">{alternative.contributors}</span>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- Languages -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6 mb-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Languages</h3>
+          <div class="flex flex-wrap gap-2">
+            {alternative.languages.map((language) => (
+              <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                {language}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        <!-- Related Alternatives -->
+        <div class="bg-white border border-gray-200 rounded-lg p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Related Alternatives</h3>
+          <div class="space-y-3">
+            <a href="#" class="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
+              <div class="font-medium text-gray-900">Alternative 1</div>
+              <div class="text-sm text-gray-600">Similar features and functionality</div>
+            </a>
+            <a href="#" class="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
+              <div class="font-medium text-gray-900">Alternative 2</div>
+              <div class="text-sm text-gray-600">Lightweight option</div>
+            </a>
+            <a href="#" class="block p-3 rounded-lg hover:bg-gray-50 transition-colors">
+              <div class="font-medium text-gray-900">Alternative 3</div>
+              <div class="text-sm text-gray-600">Enterprise-focused</div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</Layout>

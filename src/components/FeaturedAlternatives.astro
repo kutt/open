@@ -1,0 +1,68 @@
+---
+import { Star, ArrowRight } from "lucide-astro";
+import { sampleAlternatives } from "../types/data.ts";
+
+// Get featured alternatives (first 6)
+const featuredAlternatives = sampleAlternatives.slice(0, 6);
+---
+
+<section class="py-20 bg-white dark:bg-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+        Featured Alternatives
+      </h2>
+      <p class="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+        Discover the most popular open source alternatives to proprietary software
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {featuredAlternatives.map((alternative) => (
+        <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-primary-300 dark:hover:border-primary-600">
+          <div class="flex items-center mb-4">
+            <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+              <span class="text-primary-600 dark:text-primary-400 text-xl font-bold">
+                {alternative.name.charAt(0)}
+              </span>
+            </div>
+            <div class="ml-4">
+              <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
+                {alternative.name}
+              </h3>
+              <p class="text-gray-600 dark:text-gray-300">
+                Alternative to {alternative.alternativeTo}
+              </p>
+            </div>
+          </div>
+          <p class="text-gray-600 dark:text-gray-300 mb-4">
+            {alternative.description}
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center text-primary-600 dark:text-primary-400">
+              <Star class="h-4 w-4 mr-1" />
+              <span class="text-sm font-medium">{alternative.stars}</span>
+            </div>
+            <a
+              href={`/alternatives/${alternative.id}`}
+              class="text-primary-600 dark:text-primary-400 hover:text-primary-700 dark:hover:text-primary-300 font-medium flex items-center"
+            >
+              Learn more
+              <ArrowRight class="ml-1 h-4 w-4" />
+            </a>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <div class="text-center mt-12">
+      <a
+        href="/search"
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 transition-colors"
+      >
+        View All Alternatives
+        <ArrowRight class="ml-2 h-5 w-5" />
+      </a>
+    </div>
+  </div>
+</section>
