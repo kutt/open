@@ -9,7 +9,9 @@
     "alternativeTo": "Unity",
     "license": "MIT",
     "stars": 101879,
-    "language": "C++"
+    "language": "C++",
+    "featured": true,
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/godot/godot-original.svg"
   },
   {
     "id": "core",
@@ -33,7 +35,8 @@
     "alternativeTo": "Salesforce",
     "license": "NOASSERTION",
     "stars": 46483,
-    "language": "Python"
+    "language": "Python",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/odoo/odoo-original.svg"
   },
   {
     "id": "grafana",
@@ -69,7 +72,9 @@
     "alternativeTo": "Twitter",
     "license": "AGPL-3.0",
     "stars": 49100,
-    "language": "Ruby"
+    "language": "Ruby",
+    "featured": true,
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Mastodon_logotype_%28simple%29_new_hue.svg/130px-Mastodon_logotype_%28simple%29_new_hue.svg.png?20220715092751"
   },
   {
     "id": "clickhouse",
@@ -93,7 +98,9 @@
     "alternativeTo": "Figma",
     "license": "AGPL-3.0",
     "stars": 40608,
-    "language": "Clojure"
+    "language": "Clojure",
+    "featured": true,
+    "logo": "https://avatars.githubusercontent.com/u/30179644?s=200&v=4"
   },
   {
     "id": "jitsi-meet",
@@ -105,7 +112,9 @@
     "alternativeTo": "Zoom",
     "license": "Apache-2.0",
     "stars": 27330,
-    "language": "JavaScript"
+    "language": "JavaScript",
+    "featured": true,
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5d/Logo_Jitsi.svg/848px-Logo_Jitsi.svg.png"
   },
   {
     "id": "krita",
@@ -117,7 +126,10 @@
     "alternativeTo": "Photoshop",
     "license": "GPL-3.0",
     "stars": 8824,
-    "language": "C++"
+    "language": "C++",
+    "featured": true,
+    "logo": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/Calligrakrita-base.svg/1920px-Calligrakrita-base.svg.png",
+    "heroBackground": "https://invent.kde.org/websites/krita-org/-/raw/master/static/images/hero-image-50.webp"
   },
   {
     "id": "woocommerce",
@@ -189,7 +201,9 @@
     "alternativeTo": "Sublime Text",
     "license": "NOASSERTION",
     "stars": 93286,
-    "language": "Vim Script"
+    "language": "Vim Script",
+    "featured": true,
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/neovim/neovim-original.svg"
   },
   {
     "id": "zulip",

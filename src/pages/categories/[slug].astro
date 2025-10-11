@@ -1,15 +1,37 @@
 ---
 import Layout from "../../layouts/Layout.astro";
 import { sampleAlternatives, sampleCategories } from "../../types/data.ts";
+import { Github, Grid, List, Filter, SortAsc, ExternalLink, Star } from "lucide-astro";
+import alternativesData from "../../data/alternatives.json";
 
 export async function getStaticPaths() {
-  return sampleCategories.map((category) => ({
-    params: { slug: category.slug },
-    props: {
-      category,
-      alternatives: sampleAlternatives.filter((alt) => alt.categoryId === category.id),
-    },
-  }));
+  // Get all unique categories from alternatives.json
+  const categories = [...new Set(alternativesData.map(alt => alt.category))];
+  
+  return categories.map((categorySlug) => {
+    // Find alternatives for this category
+    const categoryAlternatives = alternativesData.filter(alt => alt.category === categorySlug);
+    
+    // Create a category object with proper structure
+    const category = {
+      id: categorySlug,
+      slug: categorySlug,
+      name: categorySlug.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' '),
+      description: `Open source alternatives in the ${categorySlug.split('-').map(word => 
+        word.charAt(0).toUpperCase() + word.slice(1)
+      ).join(' ')} category`
+    };
+    
+    return {
+      params: { slug: categorySlug },
+      props: {
+        category,
+        alternatives: categoryAlternatives,
+      },
+    };
+  });
 }
 
 const { category, alternatives } = Astro.props;
@@ -181,14 +203,14 @@ const { category, alternatives } = Astro.props;
                     {alternative.name}
                   </h3>
                   <p class="text-sm text-gray-500">
-                    {alternative.license}
+                    {alternative.license || 'Open Source'}
                   </p>
                 </div>
               </div>
               <div class="flex items-center text-yellow-500">
                 <Star class="h-4 w-4 fill-current" />
                 <span class="ml-1 text-sm font-medium text-gray-700">
-                  {alternative.rating}
+                  {alternative.stars ? Math.floor(alternative.stars / 1000) + 'k' : 'N/A'}
                 </span>
               </div>
             </div>
@@ -197,28 +219,23 @@ const { category, alternatives } = Astro.props;
               {alternative.description}
             </p>
 
-            <!-- Platforms -->
-            <div class="flex flex-wrap gap-2 mb-4">
-              {alternative.platforms.slice(0, 3).map((platform) => (
+            <!-- Language -->
+            {alternative.language && (
+              <div class="flex flex-wrap gap-2 mb-4">
                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  {platform.name}
+                  {alternative.language}
                 </span>
-              ))}
-              {alternative.platforms.length > 3 && (
-                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                  +{alternative.platforms.length - 3} more
-                </span>
-              )}
-            </div>
+              </div>
+            )}
 
             <!-- Stats -->
             <div class="flex items-center justify-between text-sm text-gray-500 mb-4">
               <div class="flex items-center">
                 <Github class="h-4 w-4 mr-1" />
-                {alternative.stars?.toLocaleString()} stars
+                {alternative.stars?.toLocaleString() || 'N/A'} stars
               </div>
               <div>
-                {alternative.reviewCount} reviews
+                {alternative.alternativeTo ? `Alternative to ${alternative.alternativeTo}` : 'Open Source'}
               </div>
             </div>
 
@@ -234,9 +251,9 @@ const { category, alternatives } = Astro.props;
                   <ExternalLink class="h-4 w-4 mr-1" />
                   Website
                 </a>
-                {alternative.repository && (
+                {alternative.github && (
                   <a 
-                    href={alternative.repository}
+                    href={alternative.github}
                     target="_blank"
                     rel="noopener noreferrer"
                     class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-700"

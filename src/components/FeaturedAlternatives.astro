@@ -1,9 +1,11 @@
 ---
 import { Star, ArrowRight } from "lucide-astro";
-import { sampleAlternatives } from "../types/data.ts";
+import alternativesData from "../data/alternatives.json";
 
-// Get featured alternatives (first 6)
-const featuredAlternatives = sampleAlternatives.slice(0, 6);
+// Get featured alternatives (top 6 by stars)
+const featuredAlternatives = alternativesData
+  .sort((a, b) => (b.stars || 0) - (a.stars || 0))
+  .slice(0, 6);
 ---
 
 <section class="py-20 bg-white dark:bg-gray-800">
@@ -58,7 +60,7 @@ const featuredAlternatives = sampleAlternatives.slice(0, 6);
     <div class="text-center mt-12">
       <a
         href="/search"
-        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 transition-colors"
+        class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md bg-primary-600 hover:bg-primary-700 dark:bg-primary-500 dark:hover:bg-primary-600 transition-colors"
       >
         View All Alternatives
         <ArrowRight class="ml-2 h-5 w-5" />

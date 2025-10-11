@@ -1,18 +1,240 @@
 ---
-import SearchBar from "./SearchBar.astro";
+import alternativesData from "../data/alternatives.json";
+
+// Get featured alternatives for the carousel
+const featuredProjects = alternativesData.filter(project => project.featured === true);
+
+// Function to get background image URL for a project
+function getBackgroundImage(project) {
+  // For now, we'll use gradient backgrounds based on category
+  const categoryColors = {
+    'gaming': 'from-purple-600 to-blue-600',
+    'social-media': 'from-blue-500 to-purple-500',
+    'crm': 'from-green-500 to-teal-500',
+    'observability-monitoring': 'from-orange-500 to-red-500',
+    'monitoring': 'from-orange-500 to-red-500',
+    'default': 'from-primary-500 to-primary-700'
+  };
+  
+  return categoryColors[project.category] || categoryColors.default;
+}
 ---
 
-<section class="bg-gradient-to-br from-primary-50 to-primary-100 dark:from-gray-900 dark:to-gray-800 py-20">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center">
-      <h1 class="text-3xl sm:text-4xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-        find open source
-        <span class="text-primary-600 dark:text-primary-400">alternatives</span>
-      </h1>
-      <p class="text-lg sm:text-xl text-gray-600 dark:text-gray-300 mb-8 max-w-3xl mx-auto px-4">
-        Discover free, community-driven alternatives to popular software. 
-        Break free from vendor lock-in and embrace open source solutions.
-      </p>
+<section class="relative  md:h-50vh overflow-hidden">
+  <!-- Carousel Container -->
+  <div class="hero-carousel">
+    {featuredProjects.map((project, index) => (
+      <div 
+        class={`hero-slide ${index === 0 ? 'active' : ''} ${project.heroBackground ? 'hero-slide-with-bg' : 'hero-slide-gradient'}`}
+      >
+        <!-- Gradient Overlay for Text Area -->
+        <div class="absolute inset-0 bg-gradient-to-r from-black via-black to-transparent"></div>
+        
+        <!-- Content -->
+        <div class="relative z-10 h-full flex items-center">
+          <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+            <div class="max-w-2xl">
+              <!-- Project Logo and Name -->
+              <div class="flex items-center mb-6">
+                <div class="w-20 h-20 mr-6 flex-shrink-0">
+                  <img 
+                    src={project.logo || `https://ui-avatars.com/api/?name=${encodeURIComponent(project.name)}&background=b4da55&color=fff&size=128`} 
+                    alt={`${project.name} logo`}
+                    class="w-full h-full rounded-xl object-contain"
+                    loading="lazy"
+                  />
+                </div>
+                <h1 class="text-4xl sm:text-5xl md:text-7xl font-bold text-white leading-tight">
+                  {project.name}
+                </h1>
+              </div>
+              
+              <!-- Description -->
+              <p class="text-lg sm:text-xl text-gray-200 mb-8">
+                {project.description}
+              </p>
+              
+              <!-- Stats -->
+              <div class="flex items-center space-x-6 mb-8">
+                <div class="flex items-center text-white">
+                  <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  <span class="text-lg font-semibold">{project.stars?.toLocaleString() || 'N/A'} stars</span>
+                </div>
+                <div class="flex items-center text-white">
+                  <span class="text-lg font-semibold">{project.language}</span>
+                </div>
+                <div class="flex items-center text-white">
+                  <span class="text-lg font-semibold">{project.license}</span>
+                </div>
+              </div>
+              
+              <!-- Alternative Info -->
+              <div class="mb-8">
+                <p class="text-white text-lg mb-2">
+                  Alternative to <span class="font-semibold">{project.alternativeTo}</span>
+                </p>
+                <p class="text-gray-300">
+                  Category: <span class="font-medium capitalize">{project.category.replace('-', ' ')}</span>
+                </p>
+              </div>
+              
+              <!-- Action Buttons -->
+              <div class="flex flex-col sm:flex-row gap-4">
+                <a 
+                  href={`/alternatives/${project.id}`}
+                  class="inline-flex items-center px-8 py-4 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors text-lg"
+                >
+                  Explore Alternatives
+                  <svg class="ml-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                  </svg>
+                </a>
+                <a 
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center px-8 py-4 border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition-colors text-lg"
+                >
+                  View on GitHub
+                  <svg class="ml-2 h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                  </svg>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+  
+  <!-- Navigation Controls (Bottom Right) -->
+  <div class="absolute bottom-8 right-8 z-20 flex items-center space-x-4">
+    <!-- Dot Indicators -->
+    <div class="flex space-x-2 mr-4">
+      {featuredProjects.map((_, index) => (
+        <button 
+          class={`dot-indicator ${index === 0 ? 'active' : ''}`}
+          data-slide={index}
+        ></button>
+      ))}
+    </div>
+    
+    <!-- Navigation Arrows -->
+    <div class="flex space-x-2">
+      <button 
+        id="prevBtn"
+        class="bg-white bg-opacity-20 hover:bg-primary-500 hover:bg-opacity-30 text-white p-3 rounded-xl transition-all"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+        </svg>
+      </button>
+      
+      <button 
+        id="nextBtn"
+        class="bg-white bg-opacity-20 hover:bg-primary-500 hover:bg-opacity-30 text-white p-3 rounded-xl transition-all"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+        </svg>
+      </button>
     </div>
   </div>
 </section>
+
+<style>
+  .hero-carousel {
+    position: relative;
+    width: 100%;
+    height: 50vh;
+  }
+  
+  .hero-slide {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+  }
+  
+  .hero-slide-with-bg {
+    background-size: cover;
+    background-position: 80% center;
+    background-repeat: no-repeat;
+  }
+  
+  .hero-slide-gradient {
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .hero-slide.active {
+    opacity: 1;
+  }
+  
+  .dot-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .dot-indicator.active {
+    background-color: #b4da55;
+  }
+  
+  .dot-indicator:hover {
+    background-color: #b4da55;
+  }
+</style>
+
+<script>
+  let currentSlide = 0;
+  const slides = document.querySelectorAll('.hero-slide');
+  const dots = document.querySelectorAll('.dot-indicator');
+  const totalSlides = slides.length;
+  
+  function showSlide(index) {
+    // Hide all slides
+    slides.forEach(slide => slide.classList.remove('active'));
+    dots.forEach(dot => dot.classList.remove('active'));
+    
+    // Show current slide
+    slides[index].classList.add('active');
+    dots[index].classList.add('active');
+  }
+  
+  function nextSlide() {
+    currentSlide = (currentSlide + 1) % totalSlides;
+    showSlide(currentSlide);
+  }
+  
+  function prevSlide() {
+    currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
+    showSlide(currentSlide);
+  }
+  
+  // Auto-rotate every 10 seconds
+  setInterval(nextSlide, 10000);
+  
+  // Event listeners
+  document.getElementById('nextBtn').addEventListener('click', nextSlide);
+  document.getElementById('prevBtn').addEventListener('click', prevSlide);
+  
+  // Dot navigation
+  dots.forEach((dot, index) => {
+    dot.addEventListener('click', () => {
+      currentSlide = index;
+      showSlide(currentSlide);
+    });
+  });
+</script>
