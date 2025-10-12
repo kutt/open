@@ -9,43 +9,34 @@ export async function POST({ request }) {
 
     if (!githubToken || !githubRepo) {
       console.error("Missing GitHub configuration");
-      return new Response(
-        JSON.stringify({ error: "Server configuration error" }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Server configuration error" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     // Create GitHub issue
-    const issueResponse = await fetch(
-      `https://api.github.com/repos/${githubRepo}/issues`,
-      {
-        method: "POST",
-        headers: {
-          Authorization: `token ${githubToken}`,
-          Accept: "application/vnd.github.v3+json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          title,
-          body,
-          labels: labels || ["contact-form"],
-        }),
-      }
-    );
+    const issueResponse = await fetch(`https://api.github.com/repos/${githubRepo}/issues`, {
+      method: "POST",
+      headers: {
+        Authorization: `token ${githubToken}`,
+        Accept: "application/vnd.github.v3+json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        title,
+        body,
+        labels: labels || ["contact-form"],
+      }),
+    });
 
     if (!issueResponse.ok) {
       const errorData = await issueResponse.json();
       console.error("GitHub API error:", errorData);
-      return new Response(
-        JSON.stringify({ error: "Failed to create GitHub issue" }),
-        {
-          status: 500,
-          headers: { "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "Failed to create GitHub issue" }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
     }
 
     const issueData = await issueResponse.json();

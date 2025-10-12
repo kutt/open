@@ -1,5 +1,5 @@
 ---
-import { ArrowRight } from "lucide-astro";
+import { ArrowRight, Code, Database, Monitor, GitBranch, Server, Mail, Container, Zap, Video, Palette, Music, FileText, Camera, FileMusic, MessageCircle, FileText as PdfReader, Edit, Globe, Webcam, BookOpen, Wrench, Cloud, Box, Users, BarChart3, Shield, Bot, Network, Calendar, TrendingUp, Search, Brain, Gamepad2, Lock, BarChart, Workflow, Key, Cpu, TableCellsMerged } from "lucide-astro";
 import alternativesData from "../data/alternatives.json";
 
 export interface Props {
@@ -34,6 +34,57 @@ const categoryCounts = alternativesData.reduce((acc, alternative) => {
 const topCategories = Object.values(categoryCounts)
   .sort((a: any, b: any) => b.count - a.count)
   .slice(0, 6);
+
+function getCategoryIcon(category: string) {
+  const iconMap: Record<string, any> = {
+    'cms': FileText,
+    'version-control': GitBranch,
+    'development': Code,
+    'database': Database,
+    'web-server': Server,
+    'monitoring': Monitor,
+    'mail-server': Mail,
+    'container-orchestration': Container,
+    'ci-cd': Zap,
+    'email-client': Mail,
+    'video-editing': Video,
+    'graphic-design': Palette,
+    'audio-editing': Music,
+    'latex-editor': FileText,
+    'photo-editing': Camera,
+    'music-notation': FileMusic,
+    'communication': MessageCircle,
+    'pdf-reader': PdfReader,
+    'pdf-editor': Edit,
+    'webmail': Mail,
+    'web-browsers': Globe,
+    'video-recording': Webcam,
+    'team-knowledge-base': BookOpen,
+    'media-players': Video,
+    'internal-tool': Wrench,
+    'ebook-reader': BookOpen,
+    'developer-tools': Wrench,
+    'cloud-storage': Cloud,
+    '3d-modeling': Box,
+    'office-suites': FileText,
+    'e-commerce': Users,
+    'crm': Users,
+    'ai-chatbot': Bot,
+    'visual-database': Database,
+    'social-media': Users,
+    'project-management': Calendar,
+    'observability-monitoring': Monitor,
+    'gaming': Gamepad2,
+    'cybersecurity': Shield,
+    'business-intelligence': BarChart,
+    'automation': Workflow,
+    'auth-sso': Key,
+    'analytics': TrendingUp,
+    'ai-code-completion': Cpu
+  };
+  
+  return iconMap[category] || Code; // Default to Code icon
+}
 
 function getCategoryDescription(category: string): string {
   const descriptions: Record<string, string> = {
@@ -108,9 +159,10 @@ function getCategoryDescription(category: string): string {
         >
           <div class="flex items-center mb-4">
             <div class="w-12 h-12 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center group-hover:bg-primary-200 dark:group-hover:bg-primary-800 transition-colors">
-              <span class="text-primary-600 dark:text-primary-400 text-xl font-bold">
-                {category.name.charAt(0)}
-              </span>
+              {(() => {
+                const IconComponent = getCategoryIcon(category.id);
+                return <IconComponent class="h-6 w-6 text-primary-600 dark:text-primary-400" />;
+              })()}
             </div>
             <div class="ml-4">
               <h3 class="text-xl font-semibold text-gray-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">

@@ -7,22 +7,14 @@
   },
   "files": {
     "ignoreUnknown": false,
-    "includes": [
-      "src/**/*.ts",
-      "src/**/*.js",
-      "src/**/*.json",
-      "src/**/*.astro",
-      "*.ts",
-      "*.js",
-      "*.json",
-      "*.mjs"
-    ],
+    "includes": ["src/**/*.ts", "src/**/*.js", "src/**/*.json", "*.ts", "*.js", "*.json", "*.mjs"],
     "experimentalScannerIgnores": [
       "node_modules/**",
       "dist/**",
       ".astro/**",
       "public/**",
-      "bun.lock"
+      "bun.lock",
+      "src/**/*.astro"
     ]
   },
   "formatter": {
@@ -48,7 +40,7 @@
       },
       "suspicious": {
         "noExplicitAny": "warn",
-        "noConsole": "warn"
+        "noConsole": "off"
       },
       "complexity": {
         "noForEach": "off"

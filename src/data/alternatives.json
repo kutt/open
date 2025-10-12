@@ -635,7 +635,8 @@
     "alternativeTo": "Sublime Text",
     "license": "MIT",
     "stars": 177345,
-    "language": "TypeScript"
+    "language": "TypeScript",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg"
   },
   {
     "id": "vim",
@@ -1991,7 +1992,8 @@
     "alternativeTo": "Docker Swarm",
     "license": "Apache-2.0",
     "stars": 100000,
-    "language": "Go"
+    "language": "Go",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/kubernetes/kubernetes-plain.svg"
   },
   {
     "id": "docker",
@@ -2471,7 +2473,8 @@
     "alternativeTo": "DataDog",
     "license": "NOASSERTION",
     "stars": 74969,
-    "language": "Java"
+    "language": "Java",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/elasticsearch/elasticsearch-original.svg"
   },
   {
     "id": "kibana",
@@ -3071,7 +3074,8 @@
     "alternativeTo": "Squarespace",
     "license": "MIT",
     "stars": 120000,
-    "language": "JavaScript"
+    "language": "JavaScript",
+    "logo": "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg"
   },
   {
     "id": "nuxtjs",
@@ -4296,18 +4300,6 @@
     "license": "LGPL-2.1",
     "stars": 500,
     "language": "Java"
-  },
-  {
-    "id": "vscode",
-    "name": "Visual Studio Code",
-    "description": "Free, open source code editor with excellent extensions and debugging support",
-    "website": "https://code.visualstudio.com",
-    "github": "https://github.com/microsoft/vscode",
-    "category": "development",
-    "alternativeTo": "Sublime Text",
-    "license": "MIT",
-    "stars": 150000,
-    "language": "TypeScript"
   },
   {
     "id": "vim",
