@@ -4,31 +4,18 @@ import alternativesData from "../data/alternatives.json";
 // Get featured alternatives for the carousel
 const featuredProjects = alternativesData.filter(project => project.featured === true);
 
-// Function to get background image URL for a project
-function getBackgroundImage(project) {
-  // For now, we'll use gradient backgrounds based on category
-  const categoryColors = {
-    'gaming': 'from-purple-600 to-blue-600',
-    'social-media': 'from-blue-500 to-purple-500',
-    'crm': 'from-green-500 to-teal-500',
-    'observability-monitoring': 'from-orange-500 to-red-500',
-    'monitoring': 'from-orange-500 to-red-500',
-    'default': 'from-primary-500 to-primary-700'
-  };
-  
-  return categoryColors[project.category] || categoryColors.default;
+const getFormattedNumber = (number: number) => {
+  return number > 1000 ? `${(number / 1000).toFixed(1)}k` : number.toString();
 }
 ---
 
-<section class="relative  md:h-50vh overflow-hidden">
+<section class="relative  md:min-h-50vh py-20 overflow-hidden bg-gradient-to-r from-gray-800 to-transparent">
   <!-- Carousel Container -->
   <div class="hero-carousel">
     {featuredProjects.map((project, index) => (
       <div 
         class={`hero-slide ${index === 0 ? 'active' : ''} ${project.heroBackground ? 'hero-slide-with-bg' : 'hero-slide-gradient'}`}
       >
-        <!-- Gradient Overlay for Text Area -->
-        <div class="absolute inset-0 bg-gradient-to-r from-black via-black to-transparent"></div>
         
         <!-- Content -->
         <div class="relative z-10 h-full flex items-center">
@@ -60,10 +47,10 @@ function getBackgroundImage(project) {
                   <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
                   </svg>
-                  <span class="text-lg font-semibold">{project.stars?.toLocaleString() || 'N/A'} stars</span>
+                   <span class="text-lg font-semibold">{project?.stars ? getFormattedNumber(project.stars) : ''} stars</span>
                 </div>
-                <div class="flex items-center text-white">
-                  <span class="text-lg font-semibold">{project.language}</span>
+                <div class="flex gap-2 items-center text-white">
+                  {project?.language.map((language: string) => (<span class="text-lg font-semibold">{language}</span>))}
                 </div>
                 <div class="flex items-center text-white">
                   <span class="text-lg font-semibold">{project.license}</span>
@@ -146,7 +133,8 @@ function getBackgroundImage(project) {
   .hero-carousel {
     position: relative;
     width: 100%;
-    height: 50vh;
+    min-height: 50vh;
+    padding: 8rem 0;
   }
   
   .hero-slide {
