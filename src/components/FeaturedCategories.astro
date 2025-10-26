@@ -12,15 +12,280 @@ const {
   subtitle = "Explore alternatives across different software categories"
 } = Astro.props;
 
+const categories = [
+  {
+    id: "cms",
+    name: "CMS",
+    icon: FileText,
+    description: "Content management systems for building websites and applications"
+  },
+  {
+    id: "version-control",
+    name: "Version Control",
+    icon: GitBranch,
+    description: "Tools for tracking changes in source code and collaboration"
+  },
+  {
+    id: "development",
+    name: "Development",
+    icon: Code,
+    description: "Development tools and frameworks for building software"
+  },
+  {
+    id: "database",
+    name: "Database",
+    icon: Database,
+    description: "Database management systems and data storage solutions"
+  },
+  {
+    id: "web-server",
+    name: "Web Server",
+    icon: Server,
+    description: "Web servers and HTTP server software"
+  },
+  {
+    id: "monitoring",
+    name: "Monitoring",
+    icon: Monitor,
+    description: "System monitoring and observability tools"
+  },
+  {
+    id: "mail-server",
+    name: "Mail Server",
+    icon: Mail,
+    description: "Email server software for handling mail delivery"
+  },
+  {
+    id: "container-orchestration",
+    name: "Container Orchestration",
+    icon: Container,
+    description: "Tools for managing containerized applications"
+  },
+  {
+    id: "ci-cd",
+    name: "CI/CD",
+    icon: Zap,
+    description: "Continuous integration and deployment pipelines"
+  },
+  {
+    id: "email-client",
+    name: "Email Client",
+    icon: Mail,
+    description: "Email client applications for reading and sending emails"
+  },
+  {
+    id: "video-editing",
+    name: "Video Editing",
+    icon: Video,
+    description: "Video editing and post-production software"
+  },
+  {
+    id: "graphic-design",
+    name: "Graphic Design",
+    icon: Palette,
+    description: "Graphic design and image editing tools"
+  },
+  {
+    id: "audio-editing",
+    name: "Audio Editing",
+    icon: Music,
+    description: "Audio editing and music production software"
+  },
+  {
+    id: "latex-editor",
+    name: "LaTeX Editor",
+    icon: FileText,
+    description: "LaTeX document preparation and editing tools"
+  },
+  {
+    id: "photo-editing",
+    name: "Photo Editing",
+    icon: Camera,
+    description: "Photo editing and image manipulation software"
+  },
+  {
+    id: "music-notation",
+    name: "Music Notation",
+    icon: FileMusic,
+    description: "Music notation and composition software"
+  },
+  {
+    id: "communication",
+    name: "Communication",
+    icon: MessageCircle,
+    description: "Communication and messaging platforms"
+  },
+  {
+    id: "pdf-reader",
+    name: "PDF Reader",
+    icon: PdfReader,
+    description: "PDF viewing and reading applications"
+  },
+  {
+    id: "pdf-editor",
+    name: "PDF Editor",
+    icon: Edit,
+    description: "PDF editing and manipulation tools"
+  },
+  {
+    id: "webmail",
+    name: "Webmail",
+    icon: Mail,
+    description: "Web-based email client interfaces"
+  },
+  {
+    id: "web-browsers",
+    name: "Web Browsers",
+    icon: Globe,
+    description: "Web browsers for internet navigation"
+  },
+  {
+    id: "video-recording",
+    name: "Video Recording",
+    icon: Webcam,
+    description: "Screen recording and video capture tools"
+  },
+  {
+    id: "team-knowledge-base",
+    name: "Team Knowledge Base",
+    icon: BookOpen,
+    description: "Knowledge management and documentation systems"
+  },
+  {
+    id: "media-players",
+    name: "Media Players",
+    icon: Video,
+    description: "Media players for audio and video playback"
+  },
+  {
+    id: "internal-tool",
+    name: "Internal Tool",
+    icon: Wrench,
+    description: "Internal tools for business operations"
+  },
+  {
+    id: "ebook-reader",
+    name: "E-book Reader",
+    icon: BookOpen,
+    description: "E-book reading and management applications"
+  },
+  {
+    id: "developer-tools",
+    name: "Developer Tools",
+    icon: Wrench,
+    description: "Tools and utilities for software development"
+  },
+  {
+    id: "cloud-storage",
+    name: "Cloud Storage",
+    icon: Cloud,
+    description: "Cloud storage and file synchronization services"
+  },
+  {
+    id: "3d-modeling",
+    name: "3D Modeling",
+    icon: Box,
+    description: "3D modeling and computer graphics software"
+  },
+  {
+    id: "office-suites",
+    name: "Office Suites",
+    icon: FileText,
+    description: "Office productivity and document suites"
+  },
+  {
+    id: "e-commerce",
+    name: "E-commerce",
+    icon: Users,
+    description: "E-commerce platforms and online store solutions"
+  },
+  {
+    id: "crm",
+    name: "CRM",
+    icon: Users,
+    description: "Customer relationship management systems"
+  },
+  {
+    id: "ai-chatbot",
+    name: "AI Chatbot",
+    icon: Bot,
+    description: "AI-powered chatbot and conversational AI tools"
+  },
+  {
+    id: "visual-database",
+    name: "Visual Database",
+    icon: Database,
+    description: "Visual database design and management tools"
+  },
+  {
+    id: "social-media",
+    name: "Social Media",
+    icon: Users,
+    description: "Social media platforms and networking tools"
+  },
+  {
+    id: "project-management",
+    name: "Project Management",
+    icon: Calendar,
+    description: "Project management and task tracking tools"
+  },
+  {
+    id: "observability-monitoring",
+    name: "Observability Monitoring",
+    icon: Monitor,
+    description: "Application observability and monitoring solutions"
+  },
+  {
+    id: "gaming",
+    name: "Gaming",
+    icon: Gamepad2,
+    description: "Game development engines and gaming platforms"
+  },
+  {
+    id: "cybersecurity",
+    name: "Cybersecurity",
+    icon: Shield,
+    description: "Cybersecurity and security management tools"
+  },
+  {
+    id: "business-intelligence",
+    name: "Business Intelligence",
+    icon: BarChart,
+    description: "Business intelligence and analytics platforms"
+  },
+  {
+    id: "automation",
+    name: "Automation",
+    icon: Workflow,
+    description: "Workflow automation and process management tools"
+  },
+  {
+    id: "auth-sso",
+    name: "Authentication and Single Sign-On",
+    icon: Key,
+    description: "Authentication and single sign-on solutions"
+  },
+  {
+    id: "analytics",
+    name: "Analytics",
+    icon: TrendingUp,
+    description: "Data analytics and business intelligence tools"
+  },
+  {
+    id: "ai-code-completion",
+    name: "AI Code Completion",
+    icon: Cpu,
+    description: "AI-powered code completion and assistance tools"
+  },
+]
+
 // Process the alternatives data to find most popular categories
 const categoryCounts = alternativesData.reduce((acc, alternative) => {
   const category = alternative.category;
   if (!acc[category]) {
     acc[category] = {
       id: category,
-      name: category.split('-').map(word => 
-        word.charAt(0).toUpperCase() + word.slice(1)
-      ).join(' '),
+      name: categories.find((c: any) => c.id === category)?.name,
       slug: category,
       count: 0,
       description: getCategoryDescription(category)
@@ -33,109 +298,15 @@ const categoryCounts = alternativesData.reduce((acc, alternative) => {
 // Get top 6 categories by count
 const topCategories = Object.values(categoryCounts)
   .sort((a: any, b: any) => b.count - a.count)
+  .filter((category: any) => category.id !== '')
   .slice(0, 6);
 
 function getCategoryIcon(category: string) {
-  const iconMap: Record<string, any> = {
-    'cms': FileText,
-    'version-control': GitBranch,
-    'development': Code,
-    'database': Database,
-    'web-server': Server,
-    'monitoring': Monitor,
-    'mail-server': Mail,
-    'container-orchestration': Container,
-    'ci-cd': Zap,
-    'email-client': Mail,
-    'video-editing': Video,
-    'graphic-design': Palette,
-    'audio-editing': Music,
-    'latex-editor': FileText,
-    'photo-editing': Camera,
-    'music-notation': FileMusic,
-    'communication': MessageCircle,
-    'pdf-reader': PdfReader,
-    'pdf-editor': Edit,
-    'webmail': Mail,
-    'web-browsers': Globe,
-    'video-recording': Webcam,
-    'team-knowledge-base': BookOpen,
-    'media-players': Video,
-    'internal-tool': Wrench,
-    'ebook-reader': BookOpen,
-    'developer-tools': Wrench,
-    'cloud-storage': Cloud,
-    '3d-modeling': Box,
-    'office-suites': FileText,
-    'e-commerce': Users,
-    'crm': Users,
-    'ai-chatbot': Bot,
-    'visual-database': Database,
-    'social-media': Users,
-    'project-management': Calendar,
-    'observability-monitoring': Monitor,
-    'gaming': Gamepad2,
-    'cybersecurity': Shield,
-    'business-intelligence': BarChart,
-    'automation': Workflow,
-    'auth-sso': Key,
-    'analytics': TrendingUp,
-    'ai-code-completion': Cpu
-  };
-  
-  return iconMap[category] || Code; // Default to Code icon
+  return categories.find((c: any) => c.id === category)?.icon;
 }
 
 function getCategoryDescription(category: string): string {
-  const descriptions: Record<string, string> = {
-    'cms': 'Content management systems for building websites and applications',
-    'version-control': 'Tools for tracking changes in source code and collaboration',
-    'development': 'Development tools and frameworks for building software',
-    'database': 'Database management systems and data storage solutions',
-    'web-server': 'Web servers and HTTP server software',
-    'monitoring': 'System monitoring and observability tools',
-    'mail-server': 'Email server software for handling mail delivery',
-    'container-orchestration': 'Tools for managing containerized applications',
-    'ci-cd': 'Continuous integration and deployment pipelines',
-    'email-client': 'Email client applications for reading and sending emails',
-    'video-editing': 'Video editing and post-production software',
-    'graphic-design': 'Graphic design and image editing tools',
-    'audio-editing': 'Audio editing and music production software',
-    'latex-editor': 'LaTeX document preparation and editing tools',
-    'photo-editing': 'Photo editing and image manipulation software',
-    'music-notation': 'Music notation and composition software',
-    'communication': 'Communication and messaging platforms',
-    'pdf-reader': 'PDF viewing and reading applications',
-    'pdf-editor': 'PDF editing and manipulation tools',
-    'webmail': 'Web-based email client interfaces',
-    'web-browsers': 'Web browsers for internet navigation',
-    'video-recording': 'Screen recording and video capture tools',
-    'team-knowledge-base': 'Knowledge management and documentation systems',
-    'media-players': 'Media players for audio and video playback',
-    'internal-tool': 'Internal tools for business operations',
-    'ebook-reader': 'E-book reading and management applications',
-    'developer-tools': 'Tools and utilities for software development',
-    'cloud-storage': 'Cloud storage and file synchronization services',
-    '3d-modeling': '3D modeling and computer graphics software',
-    'office-suites': 'Office productivity and document suites',
-    'e-commerce': 'E-commerce platforms and online store solutions',
-    'crm': 'Customer relationship management systems',
-    'ai-chatbot': 'AI-powered chatbot and conversational AI tools',
-    'visual-database': 'Visual database design and management tools',
-    'social-media': 'Social media platforms and networking tools',
-    'project-management': 'Project management and task tracking tools',
-    'observability-monitoring': 'Application observability and monitoring solutions',
-    'gaming': 'Game development engines and gaming platforms',
-    'email-sync': 'Email synchronization and management tools',
-    'cybersecurity': 'Cybersecurity and security management tools',
-    'business-intelligence': 'Business intelligence and analytics platforms',
-    'automation': 'Workflow automation and process management tools',
-    'auth-sso': 'Authentication and single sign-on solutions',
-    'analytics': 'Data analytics and business intelligence tools',
-    'ai-code-completion': 'AI-powered code completion and assistance tools'
-  };
-  
-  return descriptions[category] || `Open source alternatives in the ${category} category`;
+  return categories.find((c: any) => c.id === category)?.description;
 }
 ---
 
