@@ -5,8 +5,12 @@ import { Github, Grid, List, Filter, SortAsc, ExternalLink, Star, Code } from "l
 import alternativesData from "../../data/alternatives.json";
 
 export async function getStaticPaths() {
-  // Get all unique categories from alternatives.json
-  const categories = [...new Set(alternativesData.map(alt => alt.category))];
+  // Get all unique categories from alternatives.json (exclude empty/falsy)
+  const categories = [...new Set(
+    alternativesData
+      .map(alt => alt.category)
+      .filter((slug): slug is string => Boolean(slug?.trim()))
+  )];
   
   return categories.map((categorySlug) => {
     // Find alternatives for this category
